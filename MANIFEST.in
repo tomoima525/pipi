@@ -1,0 +1,3 @@
+graft tomomisaweddingapp/templates
+graft tomomisaweddingapp/static
+include tomomisaweddingapp/schema.sql
