@@ -11,3 +11,16 @@ flask run
 
 ## environment
 flask 0.12
+
+## dependencies
+Cloudinary
+
+Create `instance/config.py` and setup below:
+
+```python
+USERNAME = 'xxx'
+PASSWORD = 'pass'
+CLOUDINARY_CLOUD_NAME="xxx"  
+CLOUDINARY_API_KEY="xxx"  
+CLOUDINARY_API_SECRET="xxx"  
+```
