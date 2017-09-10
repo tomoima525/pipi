@@ -1,4 +1,5 @@
 instance/config.py
-app.eggs-info/
+app.egg-info/
 tomomisaweddingapp.egg-info/
 __pycache__
+tomomisaweddingapp/tomomisaweddingapp.db
