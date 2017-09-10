@@ -3,9 +3,11 @@
 ## Share Image Instantly
 
 ## development
+pip install --editable .
 export FLASK_APP=tomomisaweddingapp   //module name
 export FLASK_DEBUG=1 // Debugging
+flask initdb
 flask run
 
 ## environment
-flask 0.12 
+flask 0.12
