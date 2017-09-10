@@ -3,6 +3,9 @@ import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
@@ -14,6 +17,14 @@ app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'tomomisaweddingapp.db')
 ))
 app.config.from_envvar('FLASK_SETTINGS', silent=True)
+
+## Cloudinary setting
+
+cloudinary.config(
+  cloud_name = app.config['CLOUDINARY_CLOUD_NAME'],
+  api_key = app.config['CLOUDINARY_API_KEY'],
+  api_secret = app.config['CLOUDINARY_API_SECRET']
+)
 
 def init_db():
     db = get_db()
@@ -66,7 +77,7 @@ def login():
 @app.route('/')
 def show_images():
     db = get_db()
-    cur = db.execute('select id, url from images order by id desc')
+    cur = db.execute('select public_id, url from images order by id desc')
     images = cur.fetchall()
     return render_template('show_images.html', images=images)
 
@@ -80,8 +91,9 @@ def add_image():
     public_id = request.form['id']
     if len(public_id) == 0:
         return redirect(url_for('temp'))
+    url = cloudinary.CloudinaryImage("sample.jpg").image(width = 100, height = 150, crop = 'fill')
     db.execute('insert into images (public_id, url) values (?,?)',
-                 [request.form['id'], request.form['url']])
+                 [request.form['id'], url])
     db.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_images'))
