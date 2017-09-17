@@ -1,38 +1,53 @@
 {% extends "base.html" %}
 {% block body %}
+<style>
+#image-template {
+  display: none;
+}
+.image {
+  width: 216px;
+  height: 384px;
+  background: #333;
+  background-size: cover;
+  float: left;
+  display:block;
+  position: absolute;
+}
+.screen {
+  width: 1920px;
+  height: 382px;
+  position: fixed;
+  left: 0px;
+  top: 348px;
+  background: #000;
+  padding: 0px;
+}
+</style>
 <script type="text/javascript">
+var imageWidth = 250;
+var lastPx = 0;
   $(function() {
     console.log( "ready!" );
     $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data) {
+      var px = 0;
       $.each(data.images, function(i, e){
-        $('#result').append(e)
+        var img = $('#image-template').clone();
+        img.css('display', 'block');
+        img.css('left', px + 'px');
+        img.css('background-image', 'url(' + e + ')');
+        img.css('background-size', 'cover');
+        img.data('url', e);
+        img.data('px', px);
+        console.log("img ", img);
+        $('#result').append(img);
+        px = px + imageWidth;
       });
     });
-    // $.each(data.images, function(i, e){
-    //   var img = $('#image-template').clone();
-    //   img.css('display', 'block');
-    //   img.css('left', px + 'px');
-    //   img.css('background-image', 'url(' + e + ')');
-    //   img.css('background-size', 'cover');
-    //   img.data('url', e);
-    //   img.data('px', px);
-    //   $('#main-screen').append(img);
-    //   px = px + imageWidth;
-    // });
-    // var submit_form = function(e) {
-    //   $.getJSON($SCRIPT_ROOT + '/list', {
-    //     a: $('input[name="a"]').val(),
-    //     b: $('input[name="b"]').val()
-    //   }, function(data) {
-    //     $('#result').text(data.result);
-    //     $('input[name=a]').focus().select();
-    //   });
-    //   return false;
-    // };
-
   });
 </script>
 <h1>jQuery Example</h1>
 <p>
-  <span id="result"></span>
+<div class="screen" id="result">
+   <div class="image" id="image-template"></div>
+</div>
 {% endblock %}

@@ -91,7 +91,7 @@ def get_image_urls_json():
     cur = db.execute('select url from images order by id desc')
     images = cur.fetchall()
     for image in images:
-        print("====== ", image[0])
+        ## http://res.cloudinary.com/tomomisawedding/image/upload/c_fill,h_150,w_100/sample.jpg
     l = [i[0] for i in images]
     return jsonify(images = l)
 
@@ -105,7 +105,7 @@ def add_image():
     public_id = request.form['id']
     if len(public_id) == 0:
         return redirect(url_for('temp'))
-    url = cloudinary.CloudinaryImage("sample.jpg").image(width = 100, height = 150, crop = 'fill')
+    url = cloudinary.CloudinaryImage("sample.jpg").build_url(width = 100, height = 150, crop = 'fill')
     db.execute('insert into images (public_id, url) values (?,?)',
                  [request.form['id'], url])
     db.commit()
