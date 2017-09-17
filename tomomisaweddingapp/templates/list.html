@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block body %}
+<script type="text/javascript">
+  $(function() {
+    console.log( "ready!" );
+    $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data) {
+      $.each(data.images, function(i, e){
+        $('#result').append(e)
+      });
+    });
+    // $.each(data.images, function(i, e){
+    //   var img = $('#image-template').clone();
+    //   img.css('display', 'block');
+    //   img.css('left', px + 'px');
+    //   img.css('background-image', 'url(' + e + ')');
+    //   img.css('background-size', 'cover');
+    //   img.data('url', e);
+    //   img.data('px', px);
+    //   $('#main-screen').append(img);
+    //   px = px + imageWidth;
+    // });
+    // var submit_form = function(e) {
+    //   $.getJSON($SCRIPT_ROOT + '/list', {
+    //     a: $('input[name="a"]').val(),
+    //     b: $('input[name="b"]').val()
+    //   }, function(data) {
+    //     $('#result').text(data.result);
+    //     $('input[name=a]').focus().select();
+    //   });
+    //   return false;
+    // };
+
+  });
+</script>
+<h1>jQuery Example</h1>
+<p>
+  <span id="result"></span>
+{% endblock %}

@@ -2,7 +2,7 @@
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash
+     render_template, flash, jsonify
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -80,6 +80,20 @@ def show_images():
     cur = db.execute('select public_id, url from images order by id desc')
     images = cur.fetchall()
     return render_template('show_images.html', images=images)
+
+@app.route('/list')
+def list():
+    return render_template('list.html')
+
+@app.route('/_list')
+def get_image_urls_json():
+    db = get_db()
+    cur = db.execute('select url from images order by id desc')
+    images = cur.fetchall()
+    for image in images:
+        print("====== ", image[0])
+    l = [i[0] for i in images]
+    return jsonify(images = l)
 
 @app.route('/add', methods=['POST'])
 def add_image():
