@@ -3,3 +3,4 @@ app.egg-info/
 tomomisaweddingapp.egg-info/
 __pycache__
 tomomisaweddingapp/tomomisaweddingapp.db
+node_modules/
