@@ -4,7 +4,8 @@ import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, jsonify
 import cloudinary
-import cloudinary.uploader
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 import cloudinary.api
 
 app = Flask(__name__, instance_relative_config=True)
@@ -100,14 +101,16 @@ def add_image():
     if not session.get('logged_in'):
         abort(401)
     db = get_db()
-    ## public_id is from Cloudinary
-    ## TODO add Cloudinary upload logic
-    public_id = request.form['id']
-    if len(public_id) == 0:
-        return redirect(url_for('temp'))
-    url = cloudinary.CloudinaryImage("sample.jpg").build_url(width = 100, height = 150, crop = 'fill')
-    db.execute('insert into images (public_id, url) values (?,?)',
-                 [request.form['id'], url])
-    db.commit()
-    flash('New entry was successfully posted')
+    file_to_upload = request.files['file']
+    if file_to_upload:
+         upload_result = upload(file_to_upload)
+         if "error" in upload_result:
+             return redirect(url_for('temp')) #TODO : create error dialog
+
+         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
+         db.execute('insert into images (public_id, url) values (?,?)',
+                 [upload_result['public_id'], url])
+         db.commit()
+         flash('New entry was successfully posted')
+
     return redirect(url_for('show_images'))

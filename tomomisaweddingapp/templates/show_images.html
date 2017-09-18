@@ -1,12 +1,26 @@
 {% extends "layout.html" %}
 {% block body %}
+<script>
+$('#upfile').change(function(){
+  if (this.files.length > 0) {
+    // 選択されたファイル情報を取得
+    var file = this.files[0];
+
+    // readerのresultプロパティに、データURLとしてエンコードされたファイルデータを格納
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = function() {
+      $('#thumbnail').attr('src', reader.result );
+    }
+  }
+});
+</script>
   {% if session.logged_in %}
-    <form action="{{ url_for('add_image') }}" method=post class=add-image>
+    <form action="{{ url_for('add_image') }}" method=post enctype="multipart/form-data">
       <dl>
-        <dt>Title:
-        <dd><input type=text size=30 name=id>
-        <dt>Text:
-        <dd><textarea name=url rows=5 cols=40></textarea>
+        <dt>Image:
+        <dd><p><input type="file" name="file" id="upfile" accept="image/*" multiple/></p>
         <dd><input type=submit value=Share>
       </dl>
     </form>
