@@ -1,0 +1,30 @@
+{
+  "name": "tomomisaweddingapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/tomoima525/tomomisaweddingapp.git"
+  },
+  "author": "tomoima525 <tomoima525@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "blueimp-file-upload": "^9.19.1",
+    "cloudinary-jquery-file-upload": "^2.3.0",
+    "jquery": "^3.2.1"
+  },
+  "description": "## Share Image Instantly",
+  "bugs": {
+    "url": "https://github.com/tomoima525/tomomisaweddingapp/issues"
+  },
+  "homepage": "https://github.com/tomoima525/tomomisaweddingapp#readme",
+  "scripts": {
+    "build": "webpack -p --progress --config webpack.config.js",
+    "dev-build": "webpack --progress -d --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --progress -d --config webpack.config.js --watch"
+  },
+  "devDependencies": {
+    "webpack": "^3.6.0"
+  }
+}
