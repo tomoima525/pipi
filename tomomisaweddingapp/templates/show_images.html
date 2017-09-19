@@ -1,12 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
-<script>
+<script type="text/javascript">
+$(function() {
+  $(".cloudinary-fileupload")
+  .cloudinary_fileupload({
+    dropZone: "#direct_upload",
+    start: function (e) {
+      $(".status").text("Starting upload...");
+    },
+    progress: function (e, data) {
+      $(".status").text("Uploading... " + Math.round((data.loaded * 100.0) / data.total) + "%");
+    },
+    fail: function (e, data) {
+      $(".status").text("Upload failed");
+    }
+  })
+});
 $('#upfile').change(function(){
   if (this.files.length > 0) {
-    // 選択されたファイル情報を取得
+    // file info
     var file = this.files[0];
 
-    // readerのresultプロパティに、データURLとしてエンコードされたファイルデータを格納
+    // read encoded datata
     var reader = new FileReader();
     reader.readAsDataURL(file);
 
@@ -17,13 +32,15 @@ $('#upfile').change(function(){
 });
 </script>
   {% if session.logged_in %}
+  <div id="direct_upload">
     <form action="{{ url_for('add_image') }}" method=post enctype="multipart/form-data">
       <dl>
         <dt>Image:
-        <dd><p><input type="file" name="file" id="upfile" accept="image/*" multiple/></p>
+        <dd><p><input type="file" name="file" id="upfile" accept="image/*" multiple/></p><span class="status"></span>
         <dd><input type=submit value=Share>
       </dl>
     </form>
+  <div>
   {% endif %}
   <ul class=images>
   {% for image in images %}
