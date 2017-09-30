@@ -20,7 +20,7 @@ if app.debug:
     print('running in debug mode')
     app.config.from_object('instance.config-%s' % os.environ['FLASK_ENV'])
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
-
+    app.config.update(SECRET_KEY='development key')
 else:
     print('NOT running in debug mode')
     app.config['CLOUDINARY_CLOUD_NAME'] = os.environ['CLOUDINARY_CLOUD_NAME']
@@ -30,6 +30,7 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
     app.config['USERNAME'] = os.environ['USERNAME']
     app.config['PASSWORD'] = os.environ['PASSWORD']
+    app.config.update(SECRET_KEY=os.environ['SECRET_KEY'])
 
 # DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
