@@ -15,15 +15,24 @@ from flask_sqlalchemy import SQLAlchemy
 # app.config.from_object('config')
 # app.config.from_pyfile('config.py')
 app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('instance.config-%s' % os.environ['FLASK_ENV'])
+
 # DB setting
-app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 if app.debug:
     print('running in debug mode')
+    app.config.from_object('instance.config-%s' % os.environ['FLASK_ENV'])
+    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
+
 else:
     print('NOT running in debug mode')
+    app.config['CLOUDINARY_CLOUD_NAME'] = os.environ['CLOUDINARY_CLOUD_NAME']
+    app.config['CLOUDINARY_API_KEY'] = os.environ['CLOUDINARY_API_KEY']
+    app.config['CLOUDINARY_API_SECRET'] = os.environ['CLOUDINARY_API_SECRET']
+    app.config['DATABASE_URL'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
+    app.config['USERNAME'] = os.environ['USERNAME']
+    app.config['PASSWORD'] = os.environ['PASSWORD']
 
 # class Image(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
