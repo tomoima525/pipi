@@ -1,1 +1,1 @@
-web: gunicorn tomomisaweddingapp.app
+web: gunicorn tomomisaweddingapp:app
