@@ -16,9 +16,6 @@ from flask_sqlalchemy import SQLAlchemy
 # app.config.from_pyfile('config.py')
 app = Flask(__name__, instance_relative_config=True)
 
-# DB setting
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
 if app.debug:
     print('running in debug mode')
     app.config.from_object('instance.config-%s' % os.environ['FLASK_ENV'])
@@ -34,6 +31,9 @@ else:
     app.config['USERNAME'] = os.environ['USERNAME']
     app.config['PASSWORD'] = os.environ['PASSWORD']
 
+# DB setting
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 # class Image(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     public_id = db.Column(db.String(80))
