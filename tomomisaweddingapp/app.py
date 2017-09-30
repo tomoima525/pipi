@@ -158,8 +158,7 @@ def add_image():
 
          url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
          cur = db.cursor()
-         cur.execute('insert into images (public_id, url) values (?,?)',
-                 [upload_result['public_id'], url])
+         cur.execute('insert into images (public_id, url) values (?,?)', [upload_result['public_id'], url])
          cur.commit()
          flash('New entry was successfully posted')
 
