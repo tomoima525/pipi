@@ -2,27 +2,43 @@
 
 ## Share Image Instantly
 
-## development
+## development(run locally)
+Install dependencies
 
 ```sh
 pip install --editable .
+```
+
+Run
+```sh
 export FLASK_APP=tomomisaweddingapp   //module name
 export FLASK_DEBUG=1 // Debugging
-flask initdb
+export FLASK_ENV=dev
+flask initdb // initialize db. Required only first time
 flask run
 ```
 
-## production(HEROKU)
+or
 
-heroku run flask initdb
+```
+export FLASK_DEBUG=1 // Debugging
+export FLASK_ENV=dev
+flask initdb // initialize db. Required only first time
+python run.py
+```
+
+## production(HEROKU)
+heroku login
+git push heroku master
+heroku run flask initdb // initialize db. Required only first time
 
 ## environment
-flask 0.12
-
-## dependencies
+python python-3.6.2
+flask 0.12.2
 Cloudinary
+postgres SQL
 
-Create `instance/config.py` and setup below:
+Create `instance/config-dev.py` and setup below:
 
 ```python
 USERNAME = 'xxx'
