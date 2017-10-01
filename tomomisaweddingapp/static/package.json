@@ -9,8 +9,6 @@
   "author": "tomoima525 <tomoima525@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "blueimp-file-upload": "^9.19.1",
-    "cloudinary-jquery-file-upload": "^2.3.0",
     "jquery": "^3.2.1"
   },
   "description": "## Share Image Instantly",

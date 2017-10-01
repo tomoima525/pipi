@@ -1,5 +1,6 @@
 # all the imports
 import os
+import sys
 import tempfile
 import psycopg2
 from urllib.parse import urlparse, uses_netloc
@@ -22,19 +23,6 @@ from linebot.models import (
     VideoMessage, AudioMessage, FileMessage
 )
 
-# get channel_secret and channel_access_token from your environment variable
-channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
-channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
-if channel_secret is None:
-    print('Specify LINE_CHANNEL_SECRET as environment variable.')
-    sys.exit(1)
-if channel_access_token is None:
-    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
-    sys.exit(1)
-
-line_bot_api = LineBotApi(channel_access_token)
-handler = WebhookHandler(channel_secret)
-
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
 # function for create tmp dir for download content
@@ -47,7 +35,6 @@ def make_static_tmp_dir():
         else:
             raise
 
-
 ## init
 app = Flask(__name__, instance_relative_config=True)
 
@@ -56,6 +43,8 @@ if app.debug:
     app.config.from_object('instance.config-%s' % os.environ['FLASK_ENV'])
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
     app.config.update(SECRET_KEY='development key')
+    channel_secret = app.config['LINE_CHANNEL_SECRET']
+    channel_access_token = app.config['LINE_CHANNEL_ACCESS_TOKEN']
 else:
     ## TODO: clean up setting
     print('NOT running in debug mode')
@@ -67,6 +56,19 @@ else:
     app.config['USERNAME'] = os.environ['USERNAME']
     app.config['PASSWORD'] = os.environ['PASSWORD']
     app.config.update(SECRET_KEY=os.environ['SECRET_KEY'])
+    channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+    channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+
+# get channel_secret and channel_access_token from your environment variable
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
 
 # DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
