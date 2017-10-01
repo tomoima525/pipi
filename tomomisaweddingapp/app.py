@@ -2,7 +2,6 @@
 import os
 import psycopg2
 from urllib.parse import urlparse, uses_netloc
-import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash, jsonify
 import cloudinary
