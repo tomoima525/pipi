@@ -1,4 +1,4 @@
-instance/config.py
+instance/
 app.egg-info/
 tomomisaweddingapp.egg-info/
 __pycache__

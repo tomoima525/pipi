@@ -1,6 +1,5 @@
-drop table if exists images;
-create table images (
-  id integer primary key autoincrement,
+CREATE TABLE IF NOT EXISTS images (
+  id SERIAL PRIMARY KEY,
   public_id text not null,
   url text not null
 );
