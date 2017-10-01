@@ -11,9 +11,6 @@ from cloudinary.utils import cloudinary_url
 import cloudinary.api
 from flask_sqlalchemy import SQLAlchemy
 
-# app = Flask(__name__, instance_relative_config=True)
-# app.config.from_object('config')
-# app.config.from_pyfile('config.py')
 app = Flask(__name__, instance_relative_config=True)
 
 if app.debug:
@@ -22,6 +19,7 @@ if app.debug:
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
     app.config.update(SECRET_KEY='development key')
 else:
+    ## TODO: clean up setting
     print('NOT running in debug mode')
     app.config['CLOUDINARY_CLOUD_NAME'] = os.environ['CLOUDINARY_CLOUD_NAME']
     app.config['CLOUDINARY_API_KEY'] = os.environ['CLOUDINARY_API_KEY']
@@ -35,25 +33,6 @@ else:
 # DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-# class Image(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     public_id = db.Column(db.String(80))
-#     url = db.Column(db.String(120))
-#
-#     def __init__(self, public_id, url):
-#         self.public_id = public_id
-#         self.url = url
-#
-#     def __repr__(self):
-#         return '<Url %r>' % self.url
-
-
-# Load default config and override config from an environment variable
-# app.config.update(dict(
-#     SECRET_KEY='development key',
-#     DATABASE=os.path.join(app.root_path, 'tomomisaweddingapp.db')
-# ))
-# app.config.from_envvar('FLASK_SETTINGS', silent=True)
 
 ## Cloudinary setting
 
@@ -88,9 +67,6 @@ def connect_db():
         port=url.port
     )
     return conn
-#     rv = sqlite3.connect(app.config['DATABASE'])
-#     rv.row_factory = sqlite3.Row
-#     return rv
 
 def get_db():
     """Opens a new database connection if there is none yet for the
@@ -128,7 +104,6 @@ def show_images():
     cur = db.cursor()
     cur.execute('select public_id, url from images order by id desc')
     images = cur.fetchall()
-    print('====',images[0])
     return render_template('show_images.html', images=images)
 
 @app.route('/list')
