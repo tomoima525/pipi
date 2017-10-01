@@ -128,6 +128,7 @@ def show_images():
     cur = db.cursor()
     cur.execute('select public_id, url from images order by id desc')
     images = cur.fetchall()
+    print('====',images[0])
     return render_template('show_images.html', images=images)
 
 @app.route('/list')
@@ -158,8 +159,8 @@ def add_image():
 
          url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
          cur = db.cursor()
-         cur.execute('insert into images (public_id, url) values (?,?)', [upload_result['public_id'], url])
-         cur.commit()
+         cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
+         db.commit()
          flash('New entry was successfully posted')
 
     return redirect(url_for('show_images'))

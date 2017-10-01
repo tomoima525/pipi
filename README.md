@@ -12,6 +12,10 @@ flask initdb
 flask run
 ```
 
+## production(HEROKU)
+
+heroku run flask initdb
+
 ## environment
 flask 0.12
 
