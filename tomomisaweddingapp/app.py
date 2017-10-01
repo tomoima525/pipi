@@ -172,6 +172,7 @@ def handle_content_message(event):
             return
 
         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
+        db = get_db()
         cur = db.cursor()
         cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
         db.commit()
