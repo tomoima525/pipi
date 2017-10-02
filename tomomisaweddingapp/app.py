@@ -1,5 +1,7 @@
 # all the imports
 import os
+import sys
+import tempfile
 import psycopg2
 from urllib.parse import urlparse, uses_netloc
 from flask import Flask, request, session, g, redirect, url_for, abort, \
@@ -10,6 +12,30 @@ from cloudinary.utils import cloudinary_url
 import cloudinary.api
 from flask_sqlalchemy import SQLAlchemy
 
+from linebot import (
+    LineBotApi, WebhookHandler
+)
+from linebot.exceptions import (
+    InvalidSignatureError
+)
+from linebot.models import (
+    MessageEvent, TextMessage, TextSendMessage, ImageMessage,
+    VideoMessage, AudioMessage, FileMessage
+)
+
+static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
+
+# function for create tmp dir for download content
+def make_static_tmp_dir():
+    try:
+        os.makedirs(static_tmp_path)
+    except OSError as exc:
+        if exc.errno == errno.EEXIST and os.path.isdir(static_tmp_path):
+            pass
+        else:
+            raise
+
+## init
 app = Flask(__name__, instance_relative_config=True)
 
 if app.debug:
@@ -17,6 +43,8 @@ if app.debug:
     app.config.from_object('instance.config-%s' % os.environ['FLASK_ENV'])
     app.config['SQLALCHEMY_DATABASE_URI'] = app.config['DATABASE_URL']
     app.config.update(SECRET_KEY='development key')
+    channel_secret = app.config['LINE_CHANNEL_SECRET']
+    channel_access_token = app.config['LINE_CHANNEL_ACCESS_TOKEN']
 else:
     ## TODO: clean up setting
     print('NOT running in debug mode')
@@ -28,6 +56,19 @@ else:
     app.config['USERNAME'] = os.environ['USERNAME']
     app.config['PASSWORD'] = os.environ['PASSWORD']
     app.config.update(SECRET_KEY=os.environ['SECRET_KEY'])
+    channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
+    channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+
+# get channel_secret and channel_access_token from your environment variable
+if channel_secret is None:
+    print('Specify LINE_CHANNEL_SECRET as environment variable.')
+    sys.exit(1)
+if channel_access_token is None:
+    print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+    sys.exit(1)
+
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
 
 # DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -80,6 +121,68 @@ def close_db(error):
     """Closes the database again at the end of the request."""
     if hasattr(g, '_database'):
         g._database.close()
+
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # handle webhook body
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+
+    return 'OK'
+
+## Handler for LINE chat bot
+@handler.add(MessageEvent, message=TextMessage)
+def handle_text_message(event):
+    text = event.message.text
+
+    if text == '写真一覧':
+        ## Show image list
+        link = '写真一覧です https://tomomisa-wedding-1015.herokuapp.com/list'
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=link))
+
+# Image Message Type
+@handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
+def handle_content_message(event):
+    if isinstance(event.message, ImageMessage):
+        ext = 'jpg'
+    else:
+        sorry_text='画像以外は送れません、ごめんなさい!'
+        line_bot_api.reply_message(
+            event.reply_token, TextSendMessage(text=sorry_text))
+        return
+
+    message_content = line_bot_api.get_message_content(event.message.id)
+    with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-', delete=False) as tf:
+        for chunk in message_content.iter_content():
+            tf.write(chunk)
+        #tempfile_path = tf.name
+        upload_result = upload(tf.name)
+        if "error" in upload_result:
+            error_text='送信が失敗しました、もう一度トライしてみて下さい!'
+            line_bot_api.reply_message(
+                event.reply_token, TextSendMessage(text=error_text))
+            return
+
+        url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
+        db = get_db()
+        cur = db.cursor()
+        cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
+        db.commit()
+        line_bot_api.reply_message(
+            event.reply_token, [
+                TextSendMessage(text='送信されました!'),
+                TextSendMessage(text=url)
+                ])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

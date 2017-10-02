@@ -9,13 +9,6 @@ const config = {
     resolve: {
         extensions: ['.js', '.jsx', '.css']
     },
-
-    plugins: [
-      new webpack.ProvidePlugin({
-      jQuery: 'jquery',
-      $: 'jquery',
-      jquery: 'jquery'
-    })
-    ]
+    cache: false,
 };
 module.exports = config;

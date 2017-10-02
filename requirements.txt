@@ -2,9 +2,11 @@ click==6.6
 cloudinary==1.8.0
 Flask==0.12.2
 Flask-SQLAlchemy==2.2
+future==0.16.0
 gunicorn==19.7.1
 itsdangerous==0.24
 Jinja2==2.8
+line-bot-sdk==1.5.0
 MarkupSafe==0.23
 mock==2.0.0
 pbr==3.1.1
