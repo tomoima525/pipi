@@ -146,7 +146,7 @@ def handle_text_message(event):
 
     if text == '写真一覧':
         ## Show image list
-        link = 'https://tomomisa-wedding-1015.herokuapp.com/list'
+        link = '写真一覧です https://tomomisa-wedding-1015.herokuapp.com/list'
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=link))
 
@@ -178,9 +178,6 @@ def handle_content_message(event):
         cur = db.cursor()
         cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
         db.commit()
-    # dist_path = tempfile_path + '.' + ext
-    # dist_name = os.path.basename(dist_path)
-    # os.rename(tempfile_path, dist_path)
         line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text='送信されました!'),
