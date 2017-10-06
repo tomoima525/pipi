@@ -4,9 +4,14 @@
 #image-template {
   display: none;
 }
+.base {
+  background: #000;
+  width: 1920px;
+  height: 1080px;
+}
 .image {
-  width: 216px;
-  height: 384px;
+  height: 350px;
+  width: 350px;
   background: #333;
   background-size: cover;
   float: left;
@@ -15,7 +20,7 @@
 }
 .screen {
   width: 1920px;
-  height: 382px;
+  height: 1080px;
   position: fixed;
   left: 0px;
   top: 348px;
@@ -24,7 +29,7 @@
 }
 </style>
 <script type="text/javascript">
-var imageWidth = 250;
+var imageWidth = 370;
 var lastPx = 0;
   $(function() {
     console.log( "ready!" );
@@ -45,9 +50,9 @@ var lastPx = 0;
     });
   });
 </script>
-<h1>jQuery Example</h1>
-<p>
+<div class="base">
 <div class="screen" id="result">
    <div class="image" id="image-template"></div>
+</div>
 </div>
 {% endblock %}

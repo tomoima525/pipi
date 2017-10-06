@@ -216,11 +216,12 @@ def list():
 def get_image_urls_json():
     db = get_db()
     cur = db.cursor()
-    cur.execute('select url from images order by id desc')
+    cur.execute('select public_id from images order by id desc')
     images = cur.fetchall()
-    for image in images:
+    #for public_id in images:
         ## http://res.cloudinary.com/tomomisawedding/image/upload/c_fill,h_150,w_100/sample.jpg
-        l = [i[0] for i in images]
+        #l = [i[0] for i in images]
+    l = ['http://res.cloudinary.com/tomomisawedding/image/upload/c_pad,b_black,h_150,w_150/%s.jpg' % i[0] for i in images]
     return jsonify(images = l)
 
 @app.route('/add', methods=['POST'])
