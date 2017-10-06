@@ -11,6 +11,7 @@ from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
 import cloudinary.api
 from flask_sqlalchemy import SQLAlchemy
+import socketio
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -81,6 +82,21 @@ cloudinary.config(
   api_key = app.config['CLOUDINARY_API_KEY'],
   api_secret = app.config['CLOUDINARY_API_SECRET']
 )
+
+# wrap Flask application with engineio's middleware
+sio = socketio.Server(async_mode='eventlet')
+app.wsgi_app = socketio.Middleware(sio, app.wsgi_app)
+
+# Socket
+# for debugging
+@sio.on('connect')
+def connect(sid, environ):
+    print('connect ', sid)
+
+# @sio.on('client')
+# def receive(sid, message):
+#     print('received ', message)
+#     sio.emit('notify', 'returned %s' % message)
 
 def init_db():
     db.create_all()
@@ -178,6 +194,11 @@ def handle_content_message(event):
         cur = db.cursor()
         cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
         db.commit()
+
+        # Emit value to client
+        sio.emit('notify', 'updated')
+
+        # Send successful message to Line
         line_bot_api.reply_message(
             event.reply_token, [
                 TextSendMessage(text='送信されました!'),
@@ -239,5 +260,7 @@ def add_image():
          cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
          db.commit()
          flash('New entry was successfully posted')
-
+         # Emit value to client
+         print(" posted ")
+         sio.emit('notify', 'updated')
     return redirect(url_for('show_images'))
