@@ -40,6 +40,17 @@
   top: 0px;
   display: none;
 }
+
+#new-photo {
+  width: 216px;
+  height: 342px;
+  background: #000;
+  background-size: cover;
+  position: fixed;
+  top: 368px;
+  left: 852px;
+  box-shadow: 1px 1px 10px #000;
+}
 </style>
 <script type="text/javascript">
 var imageWidth = 250;
@@ -90,6 +101,7 @@ socket.on('notify', function(message){
   if(message == 'updated'){
     $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data){
       var url = data.images[0];
+      console.log('Url: ', url);
       $('.overlay').show();
       $('.whitelay').show();
       $('.whitelay').fadeOut('slow');
@@ -121,7 +133,6 @@ function addNewImage(){
   });
   $.getJSON($SCRIPT_ROOT + '/_list', {}, function(list){
     var url = null;
-    console.log(list.images);
     $.each(list.images, function(i, e){
       if(url != null){
         return true;
@@ -149,7 +160,9 @@ function addNewImage(){
 <div class="screen" id="result">
    <div class="image" id="image-template"></div>
 </div>
-<div class='overlay'>
-   <div id="new-photo">
+<div class="overlay">
+   <div id="new-photo"></div>
+</div>
+<div class="whitelay">
 </div>
 {% endblock %}
