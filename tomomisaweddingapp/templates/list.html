@@ -53,6 +53,13 @@
 }
 </style>
 <script type="text/javascript">
+// Support TLS-specific URLs, when appropriate.
+if (window.location.protocol == "https:") {
+  var ws_scheme = "wss://";
+} else {
+  var ws_scheme = "ws://"
+};
+
 var imageWidth = 250;
 var lastPx = 0;
 $(function() {
@@ -96,7 +103,7 @@ $(function() {
 
 // Socket
 var popupTime = -1;
-var socket = io();
+var socket = io.connect(ws_scheme + location.host);
 socket.on('notify', function(message){
   if(message == 'updated'){
     $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data){
