@@ -93,6 +93,7 @@ app.wsgi_app = socketio.Middleware(sio, app.wsgi_app)
 def connect(sid, environ):
     print('connect ', sid)
 
+# for testing web socket
 # @sio.on('client')
 # def receive(sid, message):
 #     print('received ', message)
@@ -105,11 +106,23 @@ def init_db():
         _db.cursor().execute(f.read())
     _db.commit()
 
+def update_db():
+    _db = get_db()
+    with app.open_resource('update-v1.sql', mode='r') as f:
+        _db.cursor().execute(f.read())
+    _db.commit()
+
 @app.cli.command('initdb')
 def initdb_command():
     """Initializes the database."""
     init_db()
     print('Initialized the database.')
+
+@app.cli.command('updatedb')
+def updatedb_command():
+    """Updates the database."""
+    update_db()
+    print('Updated the database')
 
 def connect_db():
     """Connects to the specific database."""
@@ -201,8 +214,7 @@ def handle_content_message(event):
         # Send successful message to Line
         line_bot_api.reply_message(
             event.reply_token, [
-                TextSendMessage(text='送信されました!'),
-                TextSendMessage(text=url)
+                TextSendMessage(text='送信されました!')
                 ])
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -237,7 +249,7 @@ def list():
 def get_image_urls_json():
     db = get_db()
     cur = db.cursor()
-    cur.execute('select public_id from images order by id desc')
+    cur.execute('select public_id from images order by id desc limit 30')
     images = cur.fetchall()
     #for public_id in images:
         ## http://res.cloudinary.com/tomomisawedding/image/upload/c_fill,h_150,w_100/sample.jpg
