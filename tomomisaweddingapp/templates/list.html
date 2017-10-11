@@ -27,32 +27,156 @@
   background: #000;
   padding: 0px;
 }
+.overlay {
+  width: 1920px;
+  height: 1080px;
+  background: rgba(0,0,0,0.8);
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  display: none;
+}
+.whitelay {
+  width: 1920px;
+  height: 1080px;
+  background: #fff;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  display: none;
+}
+
+#new-photo {
+  width: 216px;
+  height: 342px;
+  background: #000;
+  background-size: cover;
+  position: fixed;
+  top: 368px;
+  left: 852px;
+  box-shadow: 1px 1px 10px #000;
+}
 </style>
 <script type="text/javascript">
+// Support TLS-specific URLs, when appropriate.
+if (window.location.protocol == "https:") {
+  var ws_scheme = "wss://";
+} else {
+  var ws_scheme = "ws://"
+};
+
 var imageWidth = 370;
 var lastPx = 0;
-  $(function() {
-    console.log( "ready!" );
-    $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data) {
-      var px = 0;
-      $.each(data.images, function(i, e){
-        var img = $('#image-template').clone();
-        img.css('display', 'block');
-        img.css('left', px + 'px');
-        img.css('background-image', 'url(' + e + ')');
-        img.css('background-size', 'cover');
-        img.data('url', e);
-        img.data('px', px);
-        console.log("img ", img);
-        $('#result').append(img);
-        px = px + imageWidth;
-      });
+$(function() {
+  $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data) {
+    var px = 0;
+    $.each(data.images, function(i, e){
+      var img = $('#image-template').clone();
+      img.css('display', 'block');
+      img.css('left', px + 'px');
+      img.css('background-image', 'url(' + e + ')');
+      img.css('background-size', 'cover');
+      img.data('url', e);
+      img.data('px', px);
+      $('#result').append(img);
+      px = px + imageWidth;
     });
+    // Rotation
+    setInterval(function(){
+      var lpx = 0;
+      $('.image').each(function(i, e){
+        e = $(e);
+        if(e.data('url') == null){
+          return true;
+        }
+        var nx = e.data('px') - 1;
+        if(nx<-imageWidth){
+          e.remove();
+          addNewImage();
+        }else{
+          e.data('px', nx);
+          e.css('left', nx + 'px');
+        }
+        if(lpx < nx + imageWidth){
+          lpx = nx+imageWidth;
+        }
+      });
+      lastPx = lpx;
+    }, 50);
   });
+});
+
+// Socket
+var popupTime = -1;
+//var socket = io.connect(ws_scheme + location.host);
+//console.log('==== ', ws_scheme + location.host);
+//var socket = io.connect('https://tomomisa-wedding-1015.herokuapp.com');
+var socket = io();
+socket.on('notify', function(message){
+  if(message == 'updated'){
+    $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data){
+      var url = data.images[0];
+      console.log('Url: ', url);
+      $('.overlay').show();
+      $('.whitelay').show();
+      $('.whitelay').fadeOut('slow');
+      var img = $('#new-photo');
+      img.css('background-image', 'url(' + url + ')');
+      img.css('background-size', 'cover');
+      popupTime = 10;
+    });
+  }
+});
+// interval
+setInterval(function(){
+  if(popupTime == 0){
+    $('.overlay').fadeOut('slow');
+  }
+  if(popupTime >= 0 ){
+    popupTime = popupTime - 1;
+  }
+}, 1000);
+
+function addNewImage(){
+  var currentImages = {};
+  $('.image').each(function(i,e){
+    e = $(e);
+    if(e.data('url') == null){
+      return true;
+    }
+    currentImages[e.data('url')] = true;
+  });
+  $.getJSON($SCRIPT_ROOT + '/_list', {}, function(list){
+    var url = null;
+    $.each(list.images, function(i, e){
+      if(url != null){
+        return true;
+      }
+      if(currentImages[e]){
+        return true;
+      }else{
+        url = e;
+      }
+    });
+    var img = $('#image-template').clone();
+    img.css('display', 'block');
+    img.css('left', lastPx + 'px');
+    img.css('background-image', 'url(' + url + ')');
+    img.css('background-size', 'cover');
+    img.data('url', url);
+    img.data('px', lastPx);
+    $('#result').append(img);
+  });
+}
+
 </script>
 <div class="base">
-<div class="screen" id="result">
-   <div class="image" id="image-template"></div>
-</div>
+  <div class="screen" id="result">
+    <div class="image" id="image-template"></div>
+  </div>
+  <div class="overlay">
+    <div id="new-photo"></div>
+  </div>
+  <div class="whitelay"></div>
 </div>
 {% endblock %}
