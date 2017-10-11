@@ -103,7 +103,8 @@ $(function() {
 
 // Socket
 var popupTime = -1;
-var socket = io.connect(ws_scheme + location.host);
+//var socket = io.connect(ws_scheme + location.host);
+var socket = io.connect('https://tomomisa-wedding-1015.herokuapp.com');
 socket.on('notify', function(message){
   if(message == 'updated'){
     $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data){
