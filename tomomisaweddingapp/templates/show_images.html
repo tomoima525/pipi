@@ -1,35 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
 <script type="text/javascript">
-$(function() {
-  $(".cloudinary-fileupload")
-  .cloudinary_fileupload({
-    dropZone: "#direct_upload",
-    start: function (e) {
-      $(".status").text("Starting upload...");
-    },
-    progress: function (e, data) {
-      $(".status").text("Uploading... " + Math.round((data.loaded * 100.0) / data.total) + "%");
-    },
-    fail: function (e, data) {
-      $(".status").text("Upload failed" + e);
-    }
-  })
-});
-$('#upfile').change(function(){
-  if (this.files.length > 0) {
-    // file info
-    var file = this.files[0];
-
-    // read encoded datata
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    reader.onload = function() {
-      $('#thumbnail').attr('src', reader.result );
-    }
-  }
-});
 </script>
   {% if session.logged_in %}
   <div id="direct_upload">
