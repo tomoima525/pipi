@@ -21,6 +21,8 @@ pip install --editable .
 ```
 
 3. Run
+Run Without web socket
+
 ```sh
 export FLASK_APP=tomomisaweddingapp   //module name
 export FLASK_DEBUG=1 // Debugging
@@ -29,12 +31,12 @@ flask initdb // initialize db. Required only first time
 flask run
 ```
 
-or
+or run with web socket server
 
 ```
 export FLASK_DEBUG=1 // Debugging
 export FLASK_ENV=dev
-flask initdb // initialize db. Required only first time
+flask tomomisaweddingapp.initdb // initialize db. Required only first time
 python run.py
 ```
 
