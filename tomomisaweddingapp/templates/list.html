@@ -4,9 +4,14 @@
 #image-template {
   display: none;
 }
+.base {
+  background: #000;
+  width: 1920px;
+  height: 1080px;
+}
 .image {
-  width: 216px;
-  height: 384px;
+  height: 350px;
+  width: 350px;
   background: #333;
   background-size: cover;
   float: left;
@@ -15,7 +20,7 @@
 }
 .screen {
   width: 1920px;
-  height: 382px;
+  height: 1080px;
   position: fixed;
   left: 0px;
   top: 348px;
@@ -42,8 +47,8 @@
 }
 
 #new-photo {
-  width: 216px;
-  height: 342px;
+  height: 350px;
+  width: 350px;
   background: #000;
   background-size: cover;
   position: fixed;
@@ -60,7 +65,7 @@ if (window.location.protocol == "https:") {
   var ws_scheme = "ws://"
 };
 
-var imageWidth = 250;
+var imageWidth = 370;
 var lastPx = 0;
 $(function() {
   $.getJSON($SCRIPT_ROOT + '/_list', {}, function(data) {
@@ -165,14 +170,13 @@ function addNewImage(){
 }
 
 </script>
-<h1>list</h1>
-<p>
-<div class="screen" id="result">
-   <div class="image" id="image-template"></div>
-</div>
-<div class="overlay">
-   <div id="new-photo"></div>
-</div>
-<div class="whitelay">
+<div class="base">
+  <div class="screen" id="result">
+    <div class="image" id="image-template"></div>
+  </div>
+  <div class="overlay">
+    <div id="new-photo"></div>
+  </div>
+  <div class="whitelay"></div>
 </div>
 {% endblock %}
