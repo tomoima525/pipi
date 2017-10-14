@@ -7,7 +7,6 @@
       <form action="{{ url_for('add_image') }}" method=post enctype="multipart/form-data">
         <dl>
           <dt>Image:
-          <!-- FIXME: ios upload issue http://qiita.com/munky69rock/items/28fd86efd42042112e75 -->
             <dd><p><input type="file" name="file" id="upfile" accept="image/*" multiple/></p>
             <dd><span class="status"></span>
             <dd><input type=submit value=Share>

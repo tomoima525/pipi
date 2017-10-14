@@ -1,0 +1,51 @@
+<title>Tomo Misa Wedding</title>
+<body>
+<style>
+body {
+  font-family: sans-serif;
+  line-height: 1.4;
+  font-size: 18px;
+  padding: 20px;
+  padding-bottom: 200px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.js-infinite-item {
+  margin: 10px 0;
+}
+
+.js-infinite-item img {
+  display: block;
+  max-width: 100%;
+}
+</style>
+<script type="text/javascript" src="static/dist/bundle.js"></script>
+<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+<script type="text/javascript">
+$(function() {
+  $('.js-infinite-layout').infiniteScroll({
+    path: function() {
+      return '/page/' + ((this.loadCount + 1));
+    },
+    append: '.js-infinite-item',
+  });
+});
+</script>
+<h1>Tomo Misa Wedding</h1>
+<p>画像をクリックするとフルサイズイメージが開きます</p>
+<div class="container">
+    {% if models %}
+        <div class="js-infinite-layout">
+            {% include "page/items.html" %}
+            <div class="js-infinite-navigation">
+                <a href="{{ request.url }}/{{ page + 1 }}"></a>
+            </div>
+        </div>
+    {% else %}
+        <p class="alert alert-info">
+            No items
+        </p>
+    {% endif %}
+</div>
+</body>
