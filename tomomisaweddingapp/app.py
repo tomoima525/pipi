@@ -73,7 +73,8 @@ handler = WebhookHandler(channel_secret)
 
 # DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+Database = SQLAlchemy(app)
+from tomomisaweddingapp.models.images import Images
 
 ## Cloudinary setting
 
@@ -100,7 +101,7 @@ def connect(sid, environ):
 #     sio.emit('notify', 'returned %s' % message)
 
 def init_db():
-    db.create_all()
+    Database.create_all()
     _db = get_db()
     with app.open_resource('schema.sql', mode='r') as f:
         _db.cursor().execute(f.read())
@@ -203,10 +204,10 @@ def handle_content_message(event):
             return
 
         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
-        db = get_db()
-        cur = db.cursor()
+        _db = get_db()
+        cur = _db.cursor()
         cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
-        db.commit()
+        _db.commit()
 
         # Emit value to client
         sio.emit('notify', 'updated')
@@ -235,8 +236,8 @@ def login():
 
 @app.route('/')
 def show_images():
-    db = get_db()
-    cur = db.cursor()
+    _db = get_db()
+    cur = _db.cursor()
     cur.execute('select public_id, url from images order by id desc')
     images = cur.fetchall()
     return render_template('show_images.html', images=images)
@@ -247,33 +248,40 @@ def list():
 
 @app.route('/_list')
 def get_image_urls_json():
-    db = get_db()
-    cur = db.cursor()
+    _db = get_db()
+    cur = _db.cursor()
     cur.execute('select public_id from images order by id desc limit 30')
     images = cur.fetchall()
     #for public_id in images:
         ## http://res.cloudinary.com/tomomisawedding/image/upload/c_fill,h_150,w_100/sample.jpg
         #l = [i[0] for i in images]
-    l = ['https://res.cloudinary.com/tomomisawedding/image/upload/c_pad,b_black,h_150,w_150/%s.jpg' % i[0] for i in images]
+    l = ['https://res.cloudinary.com/tomomisawedding/image/upload/c_pad,b_black,h_300,w_300/%s.jpg' % i[0] for i in images]
     return jsonify(images = l)
 
 @app.route('/add', methods=['POST'])
 def add_image():
     if not session.get('logged_in'):
         abort(401)
-    db = get_db()
+    _db = get_db()
     file_to_upload = request.files['file']
     if file_to_upload:
          upload_result = upload(file_to_upload)
          if "error" in upload_result:
              return redirect(url_for('temp')) #TODO : create error dialog
 
-         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
-         cur = db.cursor()
+         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 300, height = 300)
+         cur = _db.cursor()
          cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
-         db.commit()
+         _db.commit()
          flash('New entry was successfully posted')
          # Emit value to client
          print(" posted ")
          sio.emit('notify', 'updated')
     return redirect(url_for('show_images'))
+
+@app.route('/page', methods=['GET'])
+@app.route('/page/<int:page>', methods=['GET'])
+def image_list(page=1):
+    models = Images.query.paginate(page, 30, False).items
+    tmpl_name = 'page/page_top.html' if page == 1 else 'page/items.html'
+    return render_template(tmpl_name, models=models, page=page)
