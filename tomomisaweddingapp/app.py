@@ -255,7 +255,7 @@ def get_image_urls_json():
     #for public_id in images:
         ## http://res.cloudinary.com/tomomisawedding/image/upload/c_fill,h_150,w_100/sample.jpg
         #l = [i[0] for i in images]
-    l = ['https://res.cloudinary.com/tomomisawedding/image/upload/c_pad,b_black,h_150,w_150/%s.jpg' % i[0] for i in images]
+    l = ['https://res.cloudinary.com/tomomisawedding/image/upload/c_pad,b_black,h_300,w_300/%s.jpg' % i[0] for i in images]
     return jsonify(images = l)
 
 @app.route('/add', methods=['POST'])
@@ -269,7 +269,7 @@ def add_image():
          if "error" in upload_result:
              return redirect(url_for('temp')) #TODO : create error dialog
 
-         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 100, height = 150)
+         url, options = cloudinary_url(upload_result['public_id'], format = "jpg", crop = "fill", width = 300, height = 300)
          cur = _db.cursor()
          cur.execute('insert into images (public_id, url) values (%s,%s)' , (upload_result['public_id'], url))
          _db.commit()
