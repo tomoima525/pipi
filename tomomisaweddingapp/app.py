@@ -60,7 +60,8 @@ else:
     channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
     channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
-# get channel_secret and channel_access_token from your environment variable
+## Line Bot SDK
+# get channel_secret and channel_access_token from environment variable
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -71,7 +72,7 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-# DB setting
+## DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Database = SQLAlchemy(app)
 from tomomisaweddingapp.models.images import Images
@@ -84,12 +85,12 @@ cloudinary.config(
   api_secret = app.config['CLOUDINARY_API_SECRET']
 )
 
+## Web Socket
 # wrap Flask application with engineio's middleware
 sio = socketio.Server(async_mode='eventlet')
 app.wsgi_app = socketio.Middleware(sio, app.wsgi_app)
 
-# Socket
-# for debugging
+# for debugging usage
 @sio.on('connect')
 def connect(sid, environ):
     print('connect ', sid)
@@ -152,6 +153,7 @@ def close_db(error):
     if hasattr(g, '_database'):
         g._database.close()
 
+## Line Callback
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -180,7 +182,7 @@ def handle_text_message(event):
         line_bot_api.reply_message(
             event.reply_token, TextSendMessage(text=link))
 
-# Image Message Type
+# Handle Image Message Type
 @handler.add(MessageEvent, message=(ImageMessage, VideoMessage, AudioMessage))
 def handle_content_message(event):
     if isinstance(event.message, ImageMessage):
@@ -195,7 +197,7 @@ def handle_content_message(event):
     with tempfile.NamedTemporaryFile(dir=static_tmp_path, prefix=ext + '-', delete=False) as tf:
         for chunk in message_content.iter_content():
             tf.write(chunk)
-        #tempfile_path = tf.name
+        ## FIXME: image file can not be loaded
         upload_result = upload(tf.name)
         if "error" in upload_result:
             error_text='送信が失敗しました、もう一度トライしてみて下さい!'
@@ -246,18 +248,17 @@ def show_images():
 def list():
     return render_template('list.html')
 
+## List latest 30 items
 @app.route('/_list')
 def get_image_urls_json():
     _db = get_db()
     cur = _db.cursor()
     cur.execute('select public_id from images order by id desc limit 30')
     images = cur.fetchall()
-    #for public_id in images:
-        ## http://res.cloudinary.com/tomomisawedding/image/upload/c_fill,h_150,w_100/sample.jpg
-        #l = [i[0] for i in images]
     l = ['https://res.cloudinary.com/tomomisawedding/image/upload/c_pad,b_black,h_300,w_300/%s.jpg' % i[0] for i in images]
     return jsonify(images = l)
 
+## For Debugging: Add image
 @app.route('/add', methods=['POST'])
 def add_image():
     if not session.get('logged_in'):
