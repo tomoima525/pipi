@@ -1,6 +1,6 @@
 # Tomo misa wedding app
 
-- Share Image using LineBotApi
+Share Image using LineBotApi  
 
 <img src="./art/phone.png?raw=true" width=300px />
 <img src="./art/screen.png?raw=true" />
@@ -61,11 +61,14 @@ flask initdb // initialize db and create table. Required only first time
 python run.py
 ```
 
-Access `http://localhost:5000` to access debug page(uploading image).
+- Access `http://localhost:5000` to access debug page(uploading image).
+- Access `http://localhost:5000/list` to access Screen page.
+- Access `http://localhost:5000/page` to access photo list page.
+- Line feature does not work on debug mode
 
 ## production(HEROKU)
 - Set up variables from HEROKU console's setting
-- Set WEB_CONCURRENCY=3 to manage multiple worker process
+- Set `WEB_CONCURRENCY=3` to manage multiple worker process
 
 ```sh
 heroku login
@@ -74,19 +77,20 @@ heroku run flask initdb // initialize db and create table.. Required only first 
 ```
 
 ## environment
-python python-3.6.2
-flask 0.12.2
-Cloudinary 1.8.0
-socketio
+python python-3.6.2  
+flask 0.12.2  
+Cloudinary 1.8.0  
+socketio  
 postgres SQL
 
 ## Credits
-[Kyosuke Inoue](https://github.com/kyoro) - Gave me great advice around saving images and FrontEnd jQuery. Thank you so much!
+[Kyosuke Inoue](https://github.com/kyoro) - Gave me a great advice around saving images and FrontEnd jQuery. Thank you so much!
 
 ## License
 
-This app is under Apache v2 License. However, I would be very happy if you let me know before you use this source code for wedding or other events.
-Twitter: [Tomoaki Imai](https://twitter.com/tomoaki_imai)
+This app is under Apache v2 License. However, I would be very happy if you let me know before you use this source code for wedding or other events.  
+
+Twitter: [Tomoaki Imai](https://twitter.com/tomoaki_imai)  
 Gmail: tomoima525@gmail.com
 
 ```
