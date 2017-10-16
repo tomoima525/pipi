@@ -2,8 +2,8 @@
 
 - Share Image using LineBotApi
 
-![phone](./art/phone.png?raw=true)
-![screen](./art/screen.png?raw=true)
+<img src="./art/phone.png?raw=true" width=300px />
+<img src="./art/screen.png?raw=true" />
 
 ## development(run locally)
 1. Create `instance/config-dev.py` and setup below:
