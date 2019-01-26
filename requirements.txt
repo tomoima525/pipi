@@ -18,9 +18,9 @@ py==1.4.31
 pytest==3.0.3
 python-engineio==1.7.0
 python-socketio==1.8.1
-requests==2.11.1
+requests>=2.20.0
 six==1.10.0
 SQLAlchemy==1.1.14
-urllib3==1.22
+urllib3==1.24.1
 virtualenv==15.0.3
 Werkzeug==0.11.11

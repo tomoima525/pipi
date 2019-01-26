@@ -4,3 +4,4 @@ tomomisaweddingapp.egg-info/
 __pycache__
 tomomisaweddingapp/tomomisaweddingapp.db
 tomomisaweddingapp/static/node_modules/
+.vscode/
