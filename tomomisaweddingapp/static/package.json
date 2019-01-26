@@ -24,6 +24,6 @@
     "watch": "webpack --progress -d --config webpack.config.js --watch"
   },
   "devDependencies": {
-    "webpack": "^3.6.0"
+    "webpack": "^3.11.0"
   }
 }
