@@ -1,27 +1,28 @@
 # Tomo misa wedding app
 
-Share Image using LineBotApi  
+Share Image using LineBotApi
 
 <img src="./art/phone.png?raw=true" width=300px />
 <img src="./art/screen.png?raw=true" />
 
 ## development(run locally)
+
 1. Create `instance/config-dev.py` and setup below:
 
 ```python
-USERNAME = 'xxx'
+USERNAME = 'xxx' // username and passwords are for a console to manage photos. Set your own
 PASSWORD = 'pass'
-CLOUDINARY_CLOUD_NAME="xxx"  
-CLOUDINARY_API_KEY="xxx"  
-CLOUDINARY_API_SECRET="xxx"  
-DATABASE_URL="postgres:///xxx"
-DATABASE_URL="postgres:///weddingdb" //requied at 3.Setup DB
+CLOUDINARY_CLOUD_NAME="xxx"
+CLOUDINARY_API_KEY="xxx"
+CLOUDINARY_API_SECRET="xxx"
+DATABASE_URL="postgres:///weddingdb" //requied at 3. Setup DB
 LINE_CHANNEL_SECRET='xxx'
 LINE_CHANNEL_ACCESS_TOKEN='xxx'
 ```
 
 2. Install dependencies
 
+- Setup `virtualenv` before install dependencies. Create a virtual environment for this project.
 - Setup Python dependencies
 
 ```sh
@@ -33,23 +34,15 @@ pip install --editable .
 ```sh
 cd tomomisaweddingapp/static
 npm i --save
-npm build
+npm run build
 ```
 
 3. Setup DB
+
 - Install Postgres DB -> http://postgresapp.com/documentation/
-- Create DB for the service
+- Create DB for the service(db name will be used for DATABASE_URL)
 
 4. Run
-- Run Without web socket
-
-```sh
-export FLASK_APP=tomomisaweddingapp   //module name
-export FLASK_DEBUG=1 // Debugging
-export FLASK_ENV=dev
-flask initdb // initialize db and create table. Required only first time
-flask run
-```
 
 - Run with web socket server
 
@@ -67,6 +60,7 @@ python run.py
 - Line feature does not work on debug mode
 
 ## production(HEROKU)
+
 - Set up variables from HEROKU console's setting
 - Set `WEB_CONCURRENCY=3` to manage multiple worker process
 
@@ -77,6 +71,7 @@ heroku run flask initdb // initialize db and create table.. Required only first 
 ```
 
 ## environment
+
 python python-3.6.2  
 flask 0.12.2  
 Cloudinary 1.8.0  
@@ -84,11 +79,12 @@ socketio
 postgres SQL
 
 ## Credits
+
 [Kyosuke Inoue](https://github.com/kyoro) - Gave me a great advice around saving images and FrontEnd jQuery. Thank you so much!
 
 ## License
 
-This app is under Apache v2 License. However, I would be very happy if you let me know before you use this source code for wedding or other events.  
+This app is under Apache v2 License. However, I would be very happy if you let me know before you use this source code for wedding or other events.
 
 Twitter: [Tomoaki Imai](https://twitter.com/tomoaki_imai)  
 Gmail: tomoima525@gmail.com
