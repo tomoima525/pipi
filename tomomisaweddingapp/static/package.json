@@ -24,6 +24,8 @@
     "watch": "webpack --progress -d --config webpack.config.js --watch"
   },
   "devDependencies": {
-    "webpack": "^3.11.0"
+    "terser-webpack-plugin": "^1.2.2",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.1"
   }
 }
