@@ -1,6 +1,6 @@
-# Tomo misa wedding app
+# Pipi (pronounciation is 'pea-pea', not 'pie-pie')
 
-Share Image using LineBotApi
+A web service to share Image using Line Api
 
 <img src="./art/phone.png?raw=true" width=300px />
 <img src="./art/screen.png?raw=true" />
@@ -15,7 +15,7 @@ PASSWORD = 'pass'
 CLOUDINARY_CLOUD_NAME="xxx"
 CLOUDINARY_API_KEY="xxx"
 CLOUDINARY_API_SECRET="xxx"
-DATABASE_URL="postgres:///weddingdb" //requied at 3. Setup DB
+DATABASE_URL="postgres:///pipidb" //requied at 3. Setup DB
 LINE_CHANNEL_SECRET='xxx'
 LINE_CHANNEL_ACCESS_TOKEN='xxx'
 ```
@@ -32,7 +32,7 @@ pip install --editable .
 - Setup webpack
 
 ```sh
-cd tomomisaweddingapp/static
+cd pipi/static
 npm i --save
 npm run build
 ```
@@ -47,7 +47,7 @@ npm run build
 - Run with web socket server
 
 ```sh
-export FLASK_APP=tomomisaweddingapp   //module name
+export FLASK_APP=pipi   //module name
 export FLASK_DEBUG=1 // Debugging
 export FLASK_ENV=dev
 flask initdb // initialize db and create table. Required only first time
@@ -90,7 +90,7 @@ Twitter: [Tomoaki Imai](https://twitter.com/tomoaki_imai)
 Gmail: tomoima525@gmail.com
 
 ```
-Copyright 2017 Tomoaki Imai
+Copyright 2019 Tomoaki Imai
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

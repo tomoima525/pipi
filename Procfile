@@ -1,1 +1,1 @@
-web: gunicorn tomomisaweddingapp:app --worker-class eventlet
+web: gunicorn pipi :app --worker-class eventlet

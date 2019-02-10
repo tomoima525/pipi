@@ -1,7 +1,7 @@
 instance/
 app.egg-info/
-tomomisaweddingapp.egg-info/
+pipi.egg-info/
 __pycache__
-tomomisaweddingapp/tomomisaweddingapp.db
-tomomisaweddingapp/static/node_modules/
+pipi/pipi.db
+pipi/static/node_modules/
 .vscode/

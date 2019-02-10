@@ -1,5 +1,5 @@
 from datetime import datetime
-from tomomisaweddingapp.app import Database
+from pipi.app import Database
 
 class Images(Database.Model):
     id = Database.Column(Database.Integer, primary_key=True)
