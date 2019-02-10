@@ -25,6 +25,6 @@ python-socketio==3.1.2
 requests==2.21.0
 six==1.12.0
 SQLAlchemy==1.2.17
--e git+git@github.com:tomoima525/tomomisaweddingapp.git@92e787fe43760ce2a75274aef5657c784c86b491#egg=tomomisaweddingapp
+-e git+git@github.com:tomoima525/pipi.git@92e787fe43760ce2a75274aef5657c784c86b491#egg=pipi
 urllib3==1.24.1
 Werkzeug==0.14.1

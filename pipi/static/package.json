@@ -1,10 +1,10 @@
 {
-  "name": "tomomisaweddingapp",
+  "name": "pipi",
   "version": "1.0.0",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/tomoima525/tomomisaweddingapp.git"
+    "url": "git+ssh://git@github.com/tomoima525/pipi.git"
   },
   "author": "tomoima525 <tomoima525@gmail.com>",
   "license": "MIT",
@@ -14,9 +14,9 @@
   },
   "description": "## Share Image Instantly",
   "bugs": {
-    "url": "https://github.com/tomoima525/tomomisaweddingapp/issues"
+    "url": "https://github.com/tomoima525/pipi/issues"
   },
-  "homepage": "https://github.com/tomoima525/tomomisaweddingapp#readme",
+  "homepage": "https://github.com/tomoima525/pipi#readme",
   "scripts": {
     "build": "webpack -p --progress --config webpack.config.js",
     "dev-build": "webpack --progress -d --config webpack.config.js",

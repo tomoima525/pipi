@@ -1,4 +1,4 @@
-from tomomisaweddingapp.app import app
+from pipi.app import app
 import os
 import eventlet
 import eventlet.wsgi

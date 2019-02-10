@@ -75,7 +75,7 @@ handler = WebhookHandler(channel_secret)
 ## DB setting
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Database = SQLAlchemy(app)
-from tomomisaweddingapp.models.images import Images
+from pipi.models.images import Images
 
 ## Cloudinary setting
 
