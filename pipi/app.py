@@ -286,3 +286,7 @@ def image_list(page=1):
     models = Images.query.paginate(page, 30, False).items
     tmpl_name = 'page/page_top.html' if page == 1 else 'page/items.html'
     return render_template(tmpl_name, models=models, page=page)
+
+@app.route('/debug')
+def debug():
+    return render_template('debug.html')
