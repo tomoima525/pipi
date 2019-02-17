@@ -4,4 +4,5 @@ pipi.egg-info/
 __pycache__
 pipi/pipi.db
 pipi/static/node_modules/
+pipi/static/dist/
 .vscode/
