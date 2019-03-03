@@ -9,13 +9,17 @@
   "author": "tomoima525 <tomoima525@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "@types/react": "^16.8.3",
     "@types/react-dom": "^16.8.2",
+    "@types/react-router-dom": "^4.3.1",
     "infinite-scroll": "^3.0.2",
     "jquery": "^3.2.1",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "typescript": "^3.3.3"
+    "react-router-dom": "^4.3.1",
+    "typescript": "^3.3.3",
+    "webpack-dev-server": "^3.2.1"
   },
   "description": "## Share Image Instantly",
   "bugs": {
@@ -25,6 +29,7 @@
   "scripts": {
     "build": "webpack -p --progress --config webpack.config.js",
     "dev-build": "webpack --progress -d --config webpack.config.js",
+    "start": "$(yarn bin)/webpack-dev-server --open --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --progress -d --config webpack.config.js --watch"
   },

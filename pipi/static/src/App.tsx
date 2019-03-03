@@ -1,12 +1,13 @@
-import * as React from 'react';
-
-interface Props {
-  test: string;
-}
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Admin } from './pages/admin/Admin';
 
 export const App = () => (
-  <div>
-    <h1>Pipi</h1>
-    <div>debug</div>
-  </div>
+  <React.Fragment>
+    <Router>
+      <Switch>
+        <Route exact path="/admin" component={Admin} />
+      </Switch>
+    </Router>
+  </React.Fragment>
 );
