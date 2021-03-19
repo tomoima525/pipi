@@ -13,7 +13,7 @@ future==0.17.1
 greenlet==0.4.15
 idna==2.8
 itsdangerous==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 line-bot-sdk==1.8.0
 MarkupSafe==1.1.0
 mock==2.0.0
