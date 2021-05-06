@@ -6,7 +6,7 @@ dnspython==1.16.0
 enum-compat==0.0.2
 eventlet==0.24.1
 Flask==1.0.2
-Flask-Cors==3.0.7
+Flask-Cors==3.0.9
 Flask-SocketIO==3.2.1
 Flask-SQLAlchemy==2.3.2
 future==0.17.1
