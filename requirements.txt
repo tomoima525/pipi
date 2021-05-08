@@ -4,7 +4,7 @@ Click==7.0
 cloudinary==1.15.0
 dnspython==1.16.0
 enum-compat==0.0.2
-eventlet==0.24.1
+eventlet==0.31.0
 Flask==1.0.2
 Flask-Cors==3.0.7
 Flask-SocketIO==3.2.1
